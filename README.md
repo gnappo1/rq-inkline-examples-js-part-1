@@ -86,4 +86,4 @@ Your API must support cookie-based auth (or adjust the fetch wrapper).
 
 
 ## License
-MIT © Matteo
+MIT © PicciniusCodes
