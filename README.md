@@ -9,11 +9,11 @@ No backend required — this repo uses **MSW** to mock `/me`, `/me/summary`, and
 
 ## Highlights
 
-- 100% JS (no TypeScript)
-- Fetch wrapper that throws typed `HttpError` and sends cookies with `credentials: 'include'`
+- **100% JS** (no TypeScript)
+- **Fetch wrapper** that throws typed `HttpError` and sends cookies with `credentials: 'include'`
 - **Dependent queries**: `/me → /me/summary` (gated with `enabled`)
 - **Pagination**: keyset cursor feed with `keepPreviousData`, plus a `useInfiniteQuery` version
-- Sensible defaults: `staleTime`, `gcTime`, retry rules, and Devtools
+- **Sensible defaults**: `staleTime`, `gcTime`, retry rules, and Devtools
 
 ## Directory layout
 
@@ -47,16 +47,14 @@ rq-inkline-examples-js-part-1/
 # Node 18+ (or 20+)
 npm i
 npm run dev
-# open the printed localhost URL
-MSW is started automatically in development. If you move the app under a sub-path,
-main.jsx computes the correct SW URL via import.meta.env.BASE_URL.
+# open the printed localhost URL. MSW is started automatically in development. If you move the app under a sub-path, main.jsx computes the correct SW URL via import.meta.env.BASE_URL.
 ```
 
 ## How to explore
 
 * Devtools: toggle the React Query Devtools (bottom-right) to watch cache entries,fresh→stale transitions, and refetches.
-* Summary (/me → /me/summary): in src/features/me/Summary.jsx, note how enabledsuppresses /me/summary until /me is available.
-* Feed: in src/features/feed/Feed.jsx, the “hybrid” demo useskeepPreviousData: true and appends pages while guarding against duplicate application.The file includes a useInfiniteQuery version you can switch to.
+* Summary (/me → /me/summary): in src/features/me/Summary.jsx, note how suppresses /me/summary until /me is available.
+* Feed: in src/features/feed/Feed.jsx, the “hybrid” demo uses `keepPreviousData: true` and appends pages while guarding against duplicate application.The file includes a useInfiniteQuery version you can switch to.
 
 ## Configuration
 
@@ -66,20 +64,24 @@ Your API must support cookie-based auth (or adjust the fetch wrapper).
 
 ## Troubleshooting
 
-* MSW service worker MIME type errorMake sure the generated file exists at public/mockServiceWorker.js and that Dev Server serves it.Re-run: npx msw init public --save.
-* Service worker not found under a sub-pathThe repo uses:
-
-const swUrl = new URL(`${import.meta.env.BASE_URL}mockServiceWorker.js`, window.location.origin)
-await worker.start({ serviceWorker: { url: swUrl.pathname } })
-
-* This keeps the SW registered at the right path whether your base is / or /subpath/.
-* Seeing repeated “Unauthorized” (401) in the consoleCheck that dependent queries are gated (enabled) and that auth endpoints don’t retry.Example retry strategy in main.jsx:
-
-retry: (count, err) => {
-  const status = err?.status ?? 0
-  if (status === 401 || status === 403) return false
-  return count < 2
-}
+* MSW service worker MIME type errorMake sure the generated file exists at public/mockServiceWorker.js and that Dev Server serves it.
+    * Re-run: npx msw init public --save.
+* Service worker not found under a sub-path.
+    * The repo uses:
+         ```json
+        const swUrl = new URL(`${import.meta.env.BASE_URL}mockServiceWorker.js`, window.location.origin)
+        await worker.start({ serviceWorker: { url: swUrl.pathname } })
+        ```
+    * This keeps the SW registered at the right path whether your base is / or /subpath/.
+* Seeing repeated “Unauthorized” (401) in the console.
+    * Check that dependent queries are gated (enabled) and that auth endpoints don’t retry. Example retry strategy in main.jsx:
+        ```js
+        retry: (count, err) => {
+            const status = err?.status ?? 0
+            if (status === 401 || status === 403) return false
+            return count < 2
+        }
+        ```
 
 
 
