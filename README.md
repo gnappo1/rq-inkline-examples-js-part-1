@@ -3,7 +3,7 @@
 Small, runnable **JavaScript** examples that accompany the blog:
 
 **“React Query, Part 1 — The Mental Model (with running JS examples)”**  
-https://dev.to/picciniuscodes/react-query-part-1-the-mental-model-with-running-js-examples-32e2
+[dev.to blog](https://dev.to/picciniuscodes/react-query-part-1-the-mental-model-with-running-js-examples-32e2)
 
 No backend required — this repo uses **MSW** to mock `/me`, `/me/summary`, and `/feed/public`.
 
@@ -52,9 +52,9 @@ npm run dev
 
 ## How to explore
 
-* Devtools: toggle the React Query Devtools (bottom-right) to watch cache entries,fresh→stale transitions, and refetches.
-* Summary (/me → /me/summary): in src/features/me/Summary.jsx, note how suppresses /me/summary until /me is available.
-* Feed: in src/features/feed/Feed.jsx, the “hybrid” demo uses `keepPreviousData: true` and appends pages while guarding against duplicate application.The file includes a useInfiniteQuery version you can switch to.
+* **Devtools**: toggle the React Query Devtools (bottom-right) to watch cache entries,fresh→stale transitions, and refetches.
+* **Summary** (/me → /me/summary): in src/features/me/Summary.jsx, note how suppresses /me/summary until /me is available.
+* **Feed**: in src/features/feed/Feed.jsx, the “hybrid” demo uses `keepPreviousData: true` and appends pages while guarding against duplicate application.The file includes a useInfiniteQuery version you can switch to.
 
 ## Configuration
 
@@ -64,16 +64,17 @@ Your API must support cookie-based auth (or adjust the fetch wrapper).
 
 ## Troubleshooting
 
-* MSW service worker MIME type errorMake sure the generated file exists at public/mockServiceWorker.js and that Dev Server serves it.
+* **MSW service worker MIME type error**
+    * Make sure the generated file exists at public/mockServiceWorker.js and that Dev Server serves it.
     * Re-run: npx msw init public --save.
-* Service worker not found under a sub-path.
+* **Service worker not found under a sub-path**.
     * The repo uses:
-         ```json
+         ```js
         const swUrl = new URL(`${import.meta.env.BASE_URL}mockServiceWorker.js`, window.location.origin)
         await worker.start({ serviceWorker: { url: swUrl.pathname } })
         ```
     * This keeps the SW registered at the right path whether your base is / or /subpath/.
-* Seeing repeated “Unauthorized” (401) in the console.
+* **Seeing repeated “Unauthorized” (401) in the console**.
     * Check that dependent queries are gated (enabled) and that auth endpoints don’t retry. Example retry strategy in main.jsx:
         ```js
         retry: (count, err) => {
