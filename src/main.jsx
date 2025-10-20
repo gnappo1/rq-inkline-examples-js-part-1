@@ -13,7 +13,7 @@ if (import.meta.env.DEV) {
     window.location.origin
   )
 
-  const { worker } = await import('./mocks/browser')
+  const { worker } = await import('./mocks/browser.js')
   await worker.start({
     serviceWorker: { url: swUrl.pathname }, // pathname keeps it same-origin
     onUnhandledRequest: 'bypass',
@@ -39,7 +39,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <App />
-      <ReactQueryDevtools buttonPosition="bottom-right" />
+      <ReactQueryDevtools buttonPosition="bottom-right" initialIsOpen={true} />
     </QueryClientProvider>
   </React.StrictMode>,
 )
